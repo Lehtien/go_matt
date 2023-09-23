@@ -1,23 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>ましゅー</h1>
+    <hr>
+    <div class="images">
+      <img v-for="image in image_data" :key="image" alt="image" :src="image">
+    </div>
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
 import axios from 'axios'
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  },
-  created () {
-    axios.get('http://localhost/api/')
-      .then(response => {
-        console.log(response)
-      })
-  }
-}
+import { ref, onMounted } from 'vue'
+
+const image_data = ref([])
+
+onMounted(() => { 
+  axios.get('http://localhost/api/')
+    .then(response => {
+      image_data.value = response.data
+    })
+})
 </script>
 
 <style>
@@ -28,5 +30,16 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.images {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1em;
+  margin: 0 2em;
+}
+img {
+  width: 100%;
+  border: 5px solid black;
 }
 </style>
